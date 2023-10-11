@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import List from './List';
 
-function App() {
+const App = () => {
+  const [tasks, setTasks] = useState([
+    { id: 1, text: 'Yo this is a to-do app', completed: false },
+  ]);
+
+  const addTask = text => 
+  {
+    const newTask = 
+    {
+      id: tasks.length + 1,
+      text: text,
+      completed: false,
+    };
+    setTasks ([...tasks, newTask]);
+  };
+
+  const deleteTask = id => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  const toggleTask = id => 
+  {
+    setTasks(
+      tasks.map(task =>
+        task.id === id ? {...task, completed: !task.completed} : task
+        )
+      );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2>The List of Doing</h2>
+      <input
+        type ="text"
+        placeholder = "Press Enter to add"
+        onKeyPress={e => {
+          if (e.key === 'Enter') {
+            addTask(e.target.value);
+            e.target.value = '';
+          }
+        }}
+      />
+      <List tasks={tasks} onDelete={deleteTask} onToggle = {toggleTask} />
     </div>
   );
-}
+};
 
 export default App;
